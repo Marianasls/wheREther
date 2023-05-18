@@ -17,12 +17,27 @@ function SearchBar({filterText, onFilterTextChange}) {
 
 function MessageRow({ message }) {
   return (
-    <tr>
+    <tr onclick="getCity(message[1])"> 
       <td>{message[0]}</td>
       <td>{message[1]}</td>
       <td>{message[2]}</td>
     </tr>
   );
+}
+
+function getCity(code){
+  var op = 1;
+  fetch("https://script.google.com/macros/s/AKfycbybzO8Wk0j8lU8jExj9mbdv7EaEu38lbG95uDg5R3lxAejbx9Jvvv5nS9YMp1_NsoaYCA/exec?op="+op+"&code="+code)
+    .then(response => response.json())
+    .then(data => {
+      setBlogMessages(data);
+    });
+    
+    return (
+      <main className={styles.main}>
+        <FilterableMessageTable messages={blogMessages} />
+      </main>
+    );
 }
 
 function FilterableMessageTable({ messages }) {
