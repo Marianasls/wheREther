@@ -45,6 +45,9 @@ const Page = () => {
     setSelectedCity(event.target.value);
   };
 
+  const currentDate = new Date(); // Data atual
+ // const maxDate = addDays(currentDate, 2); // Adiciona dois dias à data atual
+
   return (
     <div>
       <h1>Lista de Cidades</h1>
@@ -61,11 +64,14 @@ const Page = () => {
           <p>UF: {weatherData['uf']}</p>
           {Object.keys(weatherData).map(date => (
             <div key={date}>
-              <h3>Temperatura do dia: {date}</h3>
-              {Object.keys(date).map(turno => (
+              <h3>Dia: {date}</h3>
+              {Object.keys(weatherData[date]).map(turno => (
                 <div key={turno}>
                   <h4>{turno}</h4> 
-                  <p>{weatherData[date][turno]} °C</p>
+                  <p>Temperatura máxima: {weatherData[date][turno].temp_max} °C</p>
+                  <p>Temperatura mínima: {weatherData[date][turno].temp_min} °C</p>
+                  <p>Umidade máxima: {weatherData[date][turno].umidade_max} %</p>
+                  <p>Umidade mínima: {weatherData[date][turno].umidade_min} %</p>
                 </div>
               ))}
             </div>
