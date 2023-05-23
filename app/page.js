@@ -1,11 +1,18 @@
 "use client"; 
 
 import React, { useState, useEffect } from 'react';
+import addDays from 'date-fns/addDays'
+
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Page = () => {
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
   const [weatherData, setWeatherData] = useState([]);
+  const currentDate = new Date(); // Data atual
+  const maxDate = addDays(currentDate, 2); // Adiciona dois dias à data atual
 
   useEffect(() => {
     // Função para buscar a lista de cidades 
@@ -29,9 +36,9 @@ const Page = () => {
         if (selectedCity) {
           const code = selectedCity;
           const response = await fetch('https://script.google.com/macros/s/AKfycbybzO8Wk0j8lU8jExj9mbdv7EaEu38lbG95uDg5R3lxAejbx9Jvvv5nS9YMp1_NsoaYCA/exec?op=1&code='+code);
-          const data = await response.json();
-          console.log(JSON.parse(data));
-          setWeatherData(JSON.parse(data));
+          const data_weather = await response.json();
+          console.log(JSON.parse(data_weather));
+          setWeatherData(JSON.parse(data_weather));
         }
       } catch (error) {
         console.error('Erro ao buscar as informações de clima:', error);
@@ -45,8 +52,13 @@ const Page = () => {
     setSelectedCity(event.target.value);
   };
 
-  const currentDate = new Date(); // Data atual
- // const maxDate = addDays(currentDate, 2); // Adiciona dois dias à data atual
+  const keys = Object.entries(weatherData);
+  const keys1 = keys.slice(0,2);
+  const keys2 = keys.slice(2,5);
+  
+  console.log(maxDate);
+  console.log(keys1);
+  console.log(keys2);
 
   return (
     <div>
@@ -60,20 +72,38 @@ const Page = () => {
       
       {selectedCity && (
         <div>
-          <h2>Informações de Clima para {cities.find((value)=>value[1]==selectedCity)[0]}</h2>
+          <br /><h2>Informações de Clima para {cities.find((value)=>value[1]==selectedCity)[0]}</h2><br />
           <p>UF: {weatherData['uf']}</p>
-          {Object.keys(weatherData).map(date => (
-            <div key={date}>
-              <h3>Dia: {date}</h3>
-              {Object.keys(weatherData[date]).map(turno => (
+          
+          {Object.entries(keys1).map(([key,value]) => (
+            <div key={key}>
+              <h3 key={key}>Dia: {value[0]}</h3>
+              {console.log(value[0])} {/**dia */}
+              {console.log(key)} 
+              {/** objeto value[1] 
+              
+              {Object.entries(keys1[key]).map(([turno,turnoValue]) => (
                 <div key={turno}>
-                  <h4>{turno}</h4> 
-                  <p>Temperatura máxima: {weatherData[date][turno].temp_max} °C</p>
-                  <p>Temperatura mínima: {weatherData[date][turno].temp_min} °C</p>
-                  <p>Umidade máxima: {weatherData[date][turno].umidade_max} %</p>
-                  <p>Umidade mínima: {weatherData[date][turno].umidade_min} %</p>
+                  <br /><h4>{turno}</h4> <br />
+                  <div className='primaria'>
+                    <p>Temperatura máxima: {keys1[key][turno].temp_max} °C</p><br />
+                    <p>Temperatura mínima: {keys1[key][turno].temp_min} °C</p><br />
+                    <p>Estação: {keys1[key][turno].estacao}</p> <br />
+                    <p>Resumo: {keys1[key][turno].resumo}</p><br />
+                    <p>Umidade máxima: {keys1[key][turno].umidade_max} %</p><br />
+                    <p>Umidade mínima: {keys1[key][turno].umidade_min} %</p><br />
+                  </div>
+                  <div className='secundária'>
+                    <p>Tendência: {keys1[date][turno].temp_max_tende} </p><br />
+                    <p>Nascer do sol: {keys1[date][turno].nascer} </p><br />
+                    <p>Pôr do sol: {keys1[date][turno].ocaso} </p><br />
+                    <p>Direção do vento: {keys1[date][turno].dir_vento} </p><br />
+                    <p>Intenção do vento: {keys1[date][turno].int_vento} </p><br />
+                  </div>
+
                 </div>
               ))}
+              */}
             </div>
           ))}
         </div>
