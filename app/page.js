@@ -1,95 +1,80 @@
 "use client"; 
 
-import styles from './page.module.css'
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function SearchBar({filterText, onFilterTextChange}) {
-  return (
-    <form>
-      <p>Procure uma mensagem</p>
-      <input style={{width:"100%"}}
-        type="text" value={filterText} placeholder="Search..." 
-        onChange={ (e) => onFilterTextChange(e.target.value) }/>
-    </form>
-  );
-}
+const Page = () => {
+  const [cities, setCities] = useState([]);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [weatherData, setWeatherData] = useState([]);
 
-function MessageRow({ message }) {
-  return (
-    <tr onclick="getCity(message[1])"> 
-      <td>{message[0]}</td>
-      <td>{message[1]}</td>
-      <td>{message[2]}</td>
-    </tr>
-  );
-}
+  useEffect(() => {
+    // Função para buscar a lista de cidades 
+    const fetchCities = async () => {
+      try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbybzO8Wk0j8lU8jExj9mbdv7EaEu38lbG95uDg5R3lxAejbx9Jvvv5nS9YMp1_NsoaYCA/exec?op=0');
+        const data = await response.json();
+        setCities(data);
+      } catch (error) {
+        console.error('Erro ao buscar as cidades:', error);
+      }
+    };
 
-function getCity(code){
-  var op = 1;
-  fetch("https://script.google.com/macros/s/AKfycbybzO8Wk0j8lU8jExj9mbdv7EaEu38lbG95uDg5R3lxAejbx9Jvvv5nS9YMp1_NsoaYCA/exec?op="+op+"&code="+code)
-    .then(response => response.json())
-    .then(data => {
-      setBlogMessages(data);
-    });
-    
-    return (
-      <main className={styles.main}>
-        <FilterableMessageTable messages={blogMessages} />
-      </main>
-    );
-}
+    fetchCities();
+  }, []);
 
-function FilterableMessageTable({ messages }) {
-  const [filterText, setFilterText] = useState('');
-  const rows = [];
+  useEffect(() => {
+    // Função para buscar as informações de clima
+    const fetchWeatherData = async () => {
+      try {
+        if (selectedCity) {
+          const code = selectedCity;
+          const response = await fetch('https://script.google.com/macros/s/AKfycbybzO8Wk0j8lU8jExj9mbdv7EaEu38lbG95uDg5R3lxAejbx9Jvvv5nS9YMp1_NsoaYCA/exec?op=1&code='+code);
+          const data = await response.json();
+          console.log(JSON.parse(data));
+          setWeatherData(JSON.parse(data));
+        }
+      } catch (error) {
+        console.error('Erro ao buscar as informações de clima:', error);
+      }
+    };
 
-  messages.forEach((message) => {
-    const messageText = message.toString();
-    if (messageText.toLowerCase().indexOf(filterText.toLowerCase()) === -1 ){
-      return;
-    }
-  
-    rows.push(
-      <MessageRow
-        message={message}
-        key={`${message[1]}-${message[0]}`}
-      />
-    );
-  });
+    fetchWeatherData();
+  }, [selectedCity]);
+
+  const handleCityChange = (event) => {
+    setSelectedCity(event.target.value);
+  };
 
   return (
     <div>
-      <SearchBar filterText={filterText} onFilterTextChange={setFilterText} />
-      <table>
-        <thead>
-          <tr>
-            <th>Cidade</th>
-            <th>Código</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
+      <h1>Lista de Cidades</h1>
+      <select value={selectedCity} onChange={handleCityChange}>
+        <option value="">Selecione uma cidade</option>
+        {cities.map((city) => (
+          <option key={city[0]} value={city[1]}>{city[0]}</option>
+        ))}
+      </select>
+      
+      {selectedCity && (
+        <div>
+          <h2>Informações de Clima para {cities.find((value)=>value[1]==selectedCity)[0]}</h2>
+          <p>UF: {weatherData['uf']}</p>
+          {Object.keys(weatherData).map(date => (
+            <div key={date}>
+              <h3>Temperatura do dia: {date}</h3>
+              {Object.keys(date).map(turno => (
+                <div key={turno}>
+                  <h4>{turno}</h4> 
+                  <p>{weatherData[date][turno]} °C</p>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+      
     </div>
   );
-}
+};
 
-
-export default function Home() {
-    
-  const [blogMessages, setBlogMessages] = useState([]);
-  var op = 0;
-  fetch("https://script.google.com/macros/s/AKfycbybzO8Wk0j8lU8jExj9mbdv7EaEu38lbG95uDg5R3lxAejbx9Jvvv5nS9YMp1_NsoaYCA/exec?op="+op)
-    .then(response => response.json())
-    .then(data => {
-      setBlogMessages(data);
-    });
-    
-    return (
-      <main className={styles.main}>
-        <FilterableMessageTable messages={blogMessages} />
-      </main>
-    );
-
-}
+export default Page;
