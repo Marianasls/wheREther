@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import addDays from 'date-fns/addDays'
 
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -79,31 +79,32 @@ const Page = () => {
             <div key={key}>
               <h3 key={key}>Dia: {value[0]}</h3>
               {console.log(value[0])} {/**dia */}
-              {console.log(key)} 
-              {/** objeto value[1] 
+              {console.log(key)}            
               
-              {Object.entries(keys1[key]).map(([turno,turnoValue]) => (
-                <div key={turno}>
-                  <br /><h4>{turno}</h4> <br />
+              {Object.entries([value[1]][0]).map(([turnoKey,turnoValue]) => (
+                <div key={turnoKey}>
+                  {console.log([value[1]][0][turnoKey].resumo)} 
+                  {console.log([value[1]][0])} 
+                  {console.log(turnoKey)} 
+                  <br /><h4>{turnoKey}</h4> <br />
                   <div className='primaria'>
-                    <p>Temperatura máxima: {keys1[key][turno].temp_max} °C</p><br />
-                    <p>Temperatura mínima: {keys1[key][turno].temp_min} °C</p><br />
-                    <p>Estação: {keys1[key][turno].estacao}</p> <br />
-                    <p>Resumo: {keys1[key][turno].resumo}</p><br />
-                    <p>Umidade máxima: {keys1[key][turno].umidade_max} %</p><br />
-                    <p>Umidade mínima: {keys1[key][turno].umidade_min} %</p><br />
+                    <p>Temperatura máxima: {[value[1]][0][turnoKey].temp_max} °C</p><br />
+                    <p>Temperatura mínima: {[value[1]][0][turnoKey].temp_min} °C</p><br />
+                    <p>Estação: {[value[1]][0][turnoKey].estacao}</p> <br />
+                    <p>Resumo: {[value[1]][0][turnoKey].resumo}</p><br />
+                    <p>Umidade máxima: {[value[1]][0][turnoKey].umidade_max} %</p><br />
+                    <p>Umidade mínima: {[value[1]][0][turnoKey].umidade_min} %</p><br />
                   </div>
                   <div className='secundária'>
-                    <p>Tendência: {keys1[date][turno].temp_max_tende} </p><br />
-                    <p>Nascer do sol: {keys1[date][turno].nascer} </p><br />
-                    <p>Pôr do sol: {keys1[date][turno].ocaso} </p><br />
-                    <p>Direção do vento: {keys1[date][turno].dir_vento} </p><br />
-                    <p>Intenção do vento: {keys1[date][turno].int_vento} </p><br />
+                    <p>Tendência: {[value[1]][0][turnoKey].temp_max_tende} </p><br />
+                    <p>Nascer do sol: {[value[1]][0][turnoKey].nascer} </p><br />
+                    <p>Pôr do sol: {[value[1]][0][turnoKey].ocaso} </p><br />
+                    <p>Direção do vento: {[value[1]][0][turnoKey].dir_vento} </p><br />
+                    <p>Intenção do vento: {[value[1]][0][turnoKey].int_vento} </p><br />
                   </div>
 
                 </div>
-              ))}
-              */}
+              ))}              
             </div>
           ))}
         </div>
