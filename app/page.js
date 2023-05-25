@@ -107,6 +107,36 @@ const Page = () => {
               ))}              
             </div>
           ))}
+          {Object.entries(keys2).map(([keyDia,value]) => (
+            <div key={keyDia}>
+              <h3 key={keyDia}>Dia: {value[0]}</h3>
+              {console.log(value[0])} {/**dia */}
+              {console.log(keyDia)}            
+                            
+              <div>
+                {console.log([value[1]][0].resumo)} 
+                {console.log([value[1]][0])} 
+                {console.log(keyDia)} 
+                <br /><h4>O dia inteiro</h4> <br />
+                <div className='primaria'>
+                  <p>Temperatura máxima: {[value[1]][0].temp_max} °C</p><br />
+                  <p>Temperatura mínima: {[value[1]][0].temp_min} °C</p><br />
+                  <p>Estação: {[value[1]][0].estacao}</p> <br />
+                  <p>Resumo: {[value[1]][0].resumo}</p><br />
+                  <p>Umidade máxima: {[value[1]][0].umidade_max} %</p><br />
+                  <p>Umidade mínima: {[value[1]][0].umidade_min} %</p><br />
+                </div>
+                <div className='secundária'>
+                  <p>Tendência: {[value[1]][0].temp_max_tende} </p><br />
+                  <p>Nascer do sol: {[value[1]][0].nascer} </p><br />
+                  <p>Pôr do sol: {[value[1]][0].ocaso} </p><br />
+                  <p>Direção do vento: {[value[1]][0].dir_vento} </p><br />
+                  <p>Intenção do vento: {[value[1]][0].int_vento} </p><br />
+                </div>
+
+              </div>             
+            </div>
+          ))}
         </div>
       )}
       
