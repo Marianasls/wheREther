@@ -1,9 +1,10 @@
 "use client"; 
 
 import React, { useState, useEffect } from 'react';
-import addDays from 'date-fns/addDays'
+import addDays from 'date-fns/addDays';
+import styles from './page.module.css';
 
-import DatePicker from "react-datepicker";
+//import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -55,14 +56,11 @@ const Page = () => {
   const keys = Object.entries(weatherData);
   const keys1 = keys.slice(0,2);
   const keys2 = keys.slice(2,5);
-  
-  console.log(maxDate);
-  console.log(keys1);
-  console.log(keys2);
 
   return (
-    <div>
-      <h1>Lista de Cidades</h1>
+    <div className='styles.box'>
+      {console.log(styles)}
+      <h1 >Lista de Cidades</h1>
       <select value={selectedCity} onChange={handleCityChange}>
         <option value="">Selecione uma cidade</option>
         {cities.map((city) => (
@@ -77,15 +75,10 @@ const Page = () => {
           
           {Object.entries(keys1).map(([key,value]) => (
             <div key={key}>
-              <h3 key={key}>Dia: {value[0]}</h3>
-              {console.log(value[0])} {/**dia */}
-              {console.log(key)}            
+              <h3 key={key}>Dia: {value[0]}</h3>          
               
               {Object.entries([value[1]][0]).map(([turnoKey,turnoValue]) => (
                 <div key={turnoKey}>
-                  {console.log([value[1]][0][turnoKey].resumo)} 
-                  {console.log([value[1]][0])} 
-                  {console.log(turnoKey)} 
                   <br /><h4>{turnoKey}</h4> <br />
                   <div className='primaria'>
                     <p>Temperatura máxima: {[value[1]][0][turnoKey].temp_max} °C</p><br />
@@ -109,14 +102,9 @@ const Page = () => {
           ))}
           {Object.entries(keys2).map(([keyDia,value]) => (
             <div key={keyDia}>
-              <h3 key={keyDia}>Dia: {value[0]}</h3>
-              {console.log(value[0])} {/**dia */}
-              {console.log(keyDia)}            
+              <h3 key={keyDia}>Dia: {value[0]}</h3>         
                             
               <div>
-                {console.log([value[1]][0].resumo)} 
-                {console.log([value[1]][0])} 
-                {console.log(keyDia)} 
                 <br /><h4>O dia inteiro</h4> <br />
                 <div className='primaria'>
                   <p>Temperatura máxima: {[value[1]][0].temp_max} °C</p><br />
